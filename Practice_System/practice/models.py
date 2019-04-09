@@ -7,6 +7,9 @@ class Role(models.Model):
     role_id = models.IntegerField(primary_key=True, blank=False)
     # 角色名
     role_name = models.CharField(max_length=10, blank=False)
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.role_id, self.role_name)
 
 
 # 菜单表
@@ -19,7 +22,9 @@ class Menu(models.Model):
     menu_name = models.CharField(max_length=4)
     # 父菜单id
     parent_id = models.IntegerField(default=0)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.menu_id, self.menu_name)
 
 # 教师表
 class Teacher(models.Model):
@@ -37,7 +42,9 @@ class Teacher(models.Model):
     college = models.CharField(max_length=20)
     # 教师岗位
     tea_post = models.CharField(max_length=20)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.tea_id,self.tea_name)
 
 # 学生表
 class Student(models.Model):
@@ -80,7 +87,9 @@ class Student(models.Model):
     tea_mark = models.IntegerField(default=0)
     # 企业打分
     ent_mark = models.IntegerField(default=0)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.stu_id,self.stu_name)
 
 # 企业表
 class Enterprise(models.Model):
@@ -100,7 +109,9 @@ class Enterprise(models.Model):
     ent_email = models.CharField(max_length=15)
     # 企业招聘负责人
     principal = models.CharField(max_length=10)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.ent_id,self.ent_name)
 
 # 岗位表
 class Job(models.Model):
@@ -118,7 +129,9 @@ class Job(models.Model):
     salary = models.IntegerField(default=0)
     # 工作时间
     job_time = models.IntegerField(default=0)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.job_id,self.job_name)
 
 # 选择表
 class Choice(models.Model):
@@ -126,10 +139,15 @@ class Choice(models.Model):
     job_id = models.ForeignKey(Job,  on_delete=models.CASCADE)
     stu_id = models.ForeignKey(Student,  on_delete=models.CASCADE)
     result = models.CharField(max_length=10)
-
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.choice_id, self.stu_id)
 
 # 实习周记表
 class WeekRecord(models.Model):
     weekRecord_id = models.IntegerField(primary_key=True)
     stu_id = models.ForeignKey(Student,  on_delete=models.CASCADE)
     recordContent = models.CharField(max_length=2048)
+    # 在admin管理app中显示的名称
+    def __str__(self):
+        return '{}:{}'.format(self.weekRecord_id,self.stu_id)

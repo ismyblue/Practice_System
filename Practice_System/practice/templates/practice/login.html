@@ -1,24 +1,25 @@
 <!doctype html>
 <html lang="en">
 <head>
+{% load static %}
 	<meta charset="UTF-8">
 	<title>后台登录-X-admin1.1</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="practice/css/font.css">
-	<link rel="stylesheet" href="practice/css/xadmin.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css">
-    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
-    <script src="practice/lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="practice/js/xadmin.js"></script>
+    <link rel="stylesheet" href="{% static 'practice/css/font.css' %}">
+	<link rel="stylesheet" href="{% static 'practice/css/xadmin.css' %}">
+    <link rel="stylesheet" href="{% static 'practice/css/swiper.min.css' %}">
+    <script type="text/javascript" src="{% static 'practice/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'practice/js/swiper.jquery.min.js' %}"></script>
+    <script src="{% static 'practice/lib/layui/layui.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'practice/js/xadmin.js' %}"></script>
 
 </head>
 <body>
     <div class="login-logo"><h1>X-ADMIN V1.1</h1></div>
     <div class="login-box">
-        <form class="layui-form layui-form-pane" action="">
-              
+        <form class="layui-form layui-form-pane" action="{% url 'practice:dologin' %}" method="post">
+            {% csrf_token %}
             <h3>登录你的帐号</h3>
             <label class="login-title" for="username">帐号</label>
             <div class="layui-form-item">
@@ -43,17 +44,17 @@
 	<div class="bg-changer">
         <div class="swiper-container changer-list">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><img class="item" src="practice/images/a.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/b.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/c.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/d.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/e.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/f.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/g.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/h.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/i.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/j.jpg" alt=""></div>
-                <div class="swiper-slide"><img class="item" src="practice/images/k.jpg" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/a.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/b.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/c.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/d.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/e.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/f.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/g.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/h.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/i.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/j.jpg' %}" alt=""></div>
+                <div class="swiper-slide"><img class="item" src="{% static 'practice/images/k.jpg' %}" alt=""></div>
                 <div class="swiper-slide"><span class="reset">初始化</span></div>
             </div>
         </div>
@@ -67,9 +68,9 @@
               //监听提交
               form.on('submit(login)', function(data){
                 layer.msg(JSON.stringify(data.field),function(){
-                    location.href='index.html'
+                    <!--location.href='index.html'-->
                 });
-                return false;
+                return true;
               });
             });
         })
