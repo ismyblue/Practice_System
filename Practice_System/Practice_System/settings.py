@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'practice.middleware.AccessMiddleware'
 ]
 
 ROOT_URLCONF = 'Practice_System.urls'
@@ -120,19 +121,29 @@ USE_L10N = True
 
 USE_TZ = True
 
+# session cookie的失效时间，设置为20分钟，为了安全。
+SESSION_COOKIE_AGE = 1200
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-#collectstatic将收集静态文件以进行部署的目录的绝对路径。
-#例： "/var/www/example.com/static/" C:/Practice_System/static/
+# collectstatic 将收集静态文件以进行部署的目录的绝对路径。
+# 例： "/var/www/example.com/static/" C:/Practice_System/static/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#引用位于的静态文件时使用的URL STATIC_ROOT。
-#示例："/static/"或"http://localhost:8000/static/"  在url中显示的位置
+# 引用位于的静态文件时使用的URL STATIC_ROOT。
+# 示例："/static/"或"http://localhost:8000/static/"  在url中显示的位置
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'practice/static/')
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_DIRS = [
+    os.path.join(BASE_DIR, 'practice/media/')
+]
+
 

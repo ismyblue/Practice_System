@@ -1,0 +1,25 @@
+{% block 'menu' %}
+    {% for parentmenu,childmenu in menu.items %}
+     <li class="list">
+        <a href="javascript:;">
+            <i class="iconfont">&#xe70b;</i>
+            {{ parentmenu }}
+            <i class="iconfont nav_right">&#xe697;</i>
+        </a>
+         {% for name,url in childmenu.items %}
+        <ul class="sub-menu">
+            <li>
+                <a href="{{ url }}">
+                    <i class="iconfont">&#xe6a7;</i>
+                    {{ name }}
+                </a>
+            </li>
+        </ul>
+         {% endfor %}
+    </li>
+    {% endfor %}
+{% endblock %}
+
+{% block 'infomartion' %}
+
+{% endblock %}

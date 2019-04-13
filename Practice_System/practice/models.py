@@ -22,6 +22,8 @@ class Menu(models.Model):
     menu_name = models.CharField(max_length=4)
     # 父菜单id
     parent_id = models.IntegerField(default=0)
+    # url中的单词
+    url_name = models.CharField(max_length=64)
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.menu_id, self.menu_name)
