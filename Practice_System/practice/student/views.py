@@ -6,20 +6,28 @@ from practice import daoapp
 
 def index(request):
     session = request.session
-    if 'role_id' in session.keys() and 'user_id' in session.keys():
-        role_id = int(session['role_id'])
-        stu_id = int(session['user_id'])
-        menu = daoapp.getMenu(role_id=role_id)
-        profile = daoapp.getProfile(role_id=role_id, user_id=stu_id)
-        username = daoapp.getUsername(role_id, stu_id)
-        return render(request, 'practice/index.html', {'menu': menu, 'information': profile, 'username': username})
-    else:
-        return redirect(reverse('practice:login'))
+    # if 'role_id' in session.keys() and 'user_id' in session.keys():
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    profile = daoapp.getProfile(role_id=role_id, user_id=stu_id)
+    username = daoapp.getUsername(role_id, stu_id)
+    return render(request, 'practice/index.html', {'menu': menu, 'information': profile, 'username': username,
+                                                   'role_name': 'student'})
+    # else:
+    #     return redirect(reverse('practice:login'))
 
 
-# 响应显示个人信息的请求
+# 响应显示信息修改的请求
 def profile(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    profile = daoapp.getProfile(role_id=role_id, user_id=stu_id)
+    username = daoapp.getUsername(role_id, stu_id)
+    return render(request, 'practice/profile.html', {'menu': menu, 'information': profile, 'username': username,
+                                                     'role_name': 'student'})
 
 
 # 响应显示岗位管理的请求

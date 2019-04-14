@@ -75,6 +75,7 @@ def getProfile(role_id, user_id):
         profile = __getStudentProfile(student)
     return profile
 
+
 def getUsername(role_id, user_id):
     '''
     根据role_id,user_id，返回此账号的名称
@@ -92,6 +93,7 @@ def getUsername(role_id, user_id):
     elif role_id == 4:  #如果是学生
         username = Student.objects.get(stu_id=user_id).stu_name
     return username
+
 
 def __getStudentProfile(student):
     '''
@@ -153,6 +155,7 @@ def __getEnterpriseProfile(enterprise):
     profile['邮箱'] = enterprise.ent_email
     profile['负责人'] = enterprise.principal
     return profile
+
 
 def getResource(role_id):
     '''

@@ -10,7 +10,8 @@ def index(request):
         menu = daoapp.getMenu(role_id=role_id)
         profile = daoapp.getProfile(role_id=role_id, user_id=ent_id)
         username = daoapp.getUsername(role_id, ent_id)
-        return render(request, 'practice/index.html', {'menu': menu, 'information': profile, 'username': username})
+        return render(request, 'practice/index.html', {'menu': menu, 'information': profile, 'username': username,
+                                                       'role_name': 'enterprise'})
     else:
         return redirect(reverse('practice:login'))
 
