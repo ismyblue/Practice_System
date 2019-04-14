@@ -22,10 +22,9 @@
         <div class="open-nav"><i class="iconfont">&#xe699;</i></div>
         <ul class="layui-nav right" lay-filter="">
           <li class="layui-nav-item">
-            <a href="javascript:;">username{{ username }}</a>
+            <a href="javascript:;">{{ username }}</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
-              <dd><a href="">个人信息</a></dd>
-              <dd><a href="">切换帐号</a></dd>
+              <dd><a href="{% url 'practice:index' %}">个人信息</a></dd>
               <dd><a href="{% url 'practice:logout' %}">退出</a></dd>
             </dl>
           </li>

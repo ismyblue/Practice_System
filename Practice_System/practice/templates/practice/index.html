@@ -12,10 +12,14 @@
         </tr>
     </thead>
     <tbody>
-        {% for key,value in information %}
+        {% for key,value in information.items %}
         <tr>
             <th width="30%">{{ key }}</th>
-            <td><span id="lbServerName">{{ value }}</span></td>
+            {% if key == '简历' %}
+                <td><span><a href="{{ value }}">{{ value }}</a></span></td>
+            {% else %}
+                <td><span>{{ value }}</span></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

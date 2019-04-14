@@ -5,10 +5,12 @@ from practice import daoapp
 def index(request):
     session = request.session
     if 'role_id' in session.keys() and 'user_id' in session.keys():
-        role_id = session['role_id']
+        role_id = int(session['role_id'])
+        ent_id = int(session['user_id'])
         menu = daoapp.getMenu(role_id=role_id)
-        print(menu)
-        return render(request, 'practice/index.html', {'menu': menu})
+        profile = daoapp.getProfile(role_id=role_id, user_id=ent_id)
+        username = daoapp.getUsername(role_id, ent_id)
+        return render(request, 'practice/index.html', {'menu': menu, 'information': profile, 'username': username})
     else:
         return redirect(reverse('practice:login'))
 

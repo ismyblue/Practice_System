@@ -25,7 +25,7 @@
                 <label class="layui-form-label login-form"><i class="iconfont">&#xe6b8;</i></label>
                 <div class="layui-input-inline login-inline">
                     <select name="role_id" >
-                      <option value ="1">Administrator</option>
+                      <!--<option value ="1">Administrator</option>-->
                       <option value ="2">Teacher</option>
                       <option value="3">Enterprise</option>
                       <option value="4" selected = "selected">Student</option>
@@ -43,7 +43,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label login-form"><i class="iconfont">&#xe82b;</i></label>
                 <div class="layui-input-inline login-inline">
-                  <input type="text" name="password" lay-verify="required" placeholder="请输入你的密码" autocomplete="off" class="layui-input">
+                  <input type="password" name="password" lay-verify="required" placeholder="请输入你的密码" autocomplete="off" class="layui-input">
                 </div>
             </div>
             {% if error_message %}
