@@ -1,5 +1,5 @@
 from django.urls import path
-from practice.teacher import views
+from practice.student import views
 
 app_name = 'practice.student'
 urlpatterns = [

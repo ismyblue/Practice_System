@@ -48,40 +48,22 @@ def browsejobs(request):
     pass
 
 
-# 响应显示已申请岗的请求
-def applied(request):
+# 响应显示学生管理的请求
+def studentmanage(request):
     pass
 
 
-# 响应显示协议管理的请求
-def protocol(request):
+# 响应显示浏览简历的请求
+def browseweeklyreport(request):
     pass
 
 
-# 响应显示实习协议的请求
-def internship(request):
+# 响应显示未读（周报）的请求
+def unread(request):
     pass
 
 
-# 响应显示三方协议的请求
-def tripartite(request):
+# 响应显示已读（周报）的请求
+def readed(request):
     pass
 
-
-# 响应显示就业协议的请求
-def employment(request):
-    pass
-
-
-# 响应显示实习周记的请求
-def weeklyreport(request):
-    pass
-
-# 响应显示新建周记的请求
-def newreport(request):
-    pass
-
-
-# 响应显示已写周记的请求
-def reporthistory(request):
-    pass
