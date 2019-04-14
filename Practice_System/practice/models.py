@@ -4,9 +4,10 @@ from django.db import models
 # 角色表
 class Role(models.Model):
     # 角色id
-    role_id = models.IntegerField(primary_key=True, blank=False)
+    role_id = models.IntegerField(primary_key=True, db_column='role_id', blank=False)
     # 角色名
     role_name = models.CharField(max_length=10, blank=False)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.role_id, self.role_name)
@@ -15,23 +16,25 @@ class Role(models.Model):
 # 菜单表
 class Menu(models.Model):
     # 菜单id
-    menu_id = models.IntegerField(primary_key=True, blank=False)
+    menu_id = models.IntegerField(primary_key=True, db_column='menu_id', blank=False)
     # 角色id
-    role_id = models.ForeignKey(Role, on_delete=models.CASCADE)
+    role_id = models.ForeignKey(Role, db_column='role_id', on_delete=models.CASCADE)
     # 菜单名
     menu_name = models.CharField(max_length=4)
     # 父菜单id
     parent_id = models.IntegerField(default=0)
     # url中的单词
     url_name = models.CharField(max_length=64)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.menu_id, self.menu_name)
 
+
 # 教师表
 class Teacher(models.Model):
     # 教职工号
-    tea_id = models.IntegerField(primary_key=True, blank=False)
+    tea_id = models.IntegerField(primary_key=True, db_column='tea_id',  blank=False)
     # 登陆密码
     tea_pwd = models.CharField(max_length=20)
     # 姓名
@@ -44,15 +47,17 @@ class Teacher(models.Model):
     college = models.CharField(max_length=20)
     # 教师岗位
     tea_post = models.CharField(max_length=20)
+
     # 在admin管理app中显示的名称
     def __str__(self):
-        return '{}:{}'.format(self.tea_id,self.tea_name)
+        return '{}:{}'.format(self.tea_id, self.tea_name)
+
 
 # 学生表
 class Student(models.Model):
     # 学号
-    stu_id = models.IntegerField(primary_key=True, blank=False)
-    tea_id = models.ForeignKey(Teacher,  on_delete=models.CASCADE)
+    stu_id = models.IntegerField(primary_key=True, db_column='stu_id',  blank=False)
+    tea_id = models.ForeignKey(Teacher,  db_column='tea_id',  on_delete=models.CASCADE)
     # 登陆密码
     stu_pwd = models.CharField(max_length=20)
     # 姓名
@@ -89,14 +94,16 @@ class Student(models.Model):
     tea_mark = models.IntegerField(default=0)
     # 企业打分
     ent_mark = models.IntegerField(default=0)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.stu_id,self.stu_name)
 
+
 # 企业表
 class Enterprise(models.Model):
     # 企业id
-    ent_id = models.IntegerField(primary_key=True, blank=False)
+    ent_id = models.IntegerField(primary_key=True, db_column='ent_id',  blank=False)
     # 登陆密码
     ent_pwd = models.CharField(max_length=20)
     # 企业名字
@@ -111,16 +118,18 @@ class Enterprise(models.Model):
     ent_email = models.CharField(max_length=15)
     # 企业招聘负责人
     principal = models.CharField(max_length=10)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.ent_id,self.ent_name)
 
+
 # 岗位表
 class Job(models.Model):
     # 岗位id
-    job_id = models.IntegerField(primary_key=True)
+    job_id = models.IntegerField(primary_key=True,  db_column='job_id')
     # 企业id
-    ent_id = models.ForeignKey(Enterprise,  on_delete=models.CASCADE)
+    ent_id = models.ForeignKey(Enterprise,  db_column='ent_id',  on_delete=models.CASCADE)
     # 岗位名
     job_name = models.CharField(max_length=20)
     # 岗位职责描述
@@ -131,25 +140,30 @@ class Job(models.Model):
     salary = models.IntegerField(default=0)
     # 工作时间
     job_time = models.IntegerField(default=0)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.job_id,self.job_name)
 
+
 # 选择表
 class Choice(models.Model):
     choice_id = models.IntegerField(primary_key=True)
-    job_id = models.ForeignKey(Job,  on_delete=models.CASCADE)
-    stu_id = models.ForeignKey(Student,  on_delete=models.CASCADE)
+    job_id = models.ForeignKey(Job, db_column='job_id', on_delete=models.CASCADE)
+    stu_id = models.ForeignKey(Student, db_column='stu_id',   on_delete=models.CASCADE)
     result = models.CharField(max_length=10)
+
     # 在admin管理app中显示的名称
     def __str__(self):
         return '{}:{}'.format(self.choice_id, self.stu_id)
 
+
 # 实习周记表
 class WeekRecord(models.Model):
     weekRecord_id = models.IntegerField(primary_key=True)
-    stu_id = models.ForeignKey(Student,  on_delete=models.CASCADE)
+    stu_id = models.ForeignKey(Student,  db_column='stu_id', on_delete=models.CASCADE)
     recordContent = models.CharField(max_length=2048)
+
     # 在admin管理app中显示的名称
     def __str__(self):
-        return '{}:{}'.format(self.weekRecord_id,self.stu_id)
+        return '{}:{}'.format(self.weekRecord_id, self.stu_id)
