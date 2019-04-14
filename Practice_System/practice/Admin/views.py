@@ -3,5 +3,5 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'practice/index.html')
+    return render(request, 'practice/template.html')
 

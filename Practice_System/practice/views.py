@@ -17,32 +17,45 @@ def index(request):
         return redirect(reverse('practice:login'))
 
 
-#返回登录页面
-def login(request):
-    return render(request, 'practice/login.html')
-
 #响应登陆操作，登陆成功就重定向到首页
-def dologin(request):
+def login(request):
     session = request.session
-    role_id = int(request.POST['role_id'].strip())
-    user_id = int(request.POST['username'].strip())
-    user_pwd = request.POST['password']
+    if request.method == 'GET':
+        return render(request, 'practice/login.html')
+    try:
+        role_id = int(request.POST['role_id'])
+        user_id = int(request.POST['username'])
+    except:
+        return render(request,'practice/login.html', {'error_message': '用户名只能为数字'})
+    user_pwd = str(request.POST['password'])
     if role_id == 2:    #如果是以老师身份登录，则从Teacher中查找，tea_id与user_id相等的一条teacher的数据
-        user = Teacher.objects.get(tea_id=user_id)
-        password = user.tea_pwd     #取出密码
+        try:
+            user = Teacher.objects.get(tea_id=user_id)
+        except Teacher.DoesNotExist:
+            return render(request,'practice/login.html', {'error_message': '用户名或密码错误'})
+        else:
+            password = user.tea_pwd     #取出密码
     elif role_id == 3:  #如果是以企业身份登录，Enterprise，ent_id与user_id相等的一条enterprise的数据
-        user = Enterprise.objects.get(ent_id=user_id)
-        password = user.ent_pwd
+        try:
+            user = Enterprise.objects.get(ent_id=user_id)
+        except Enterprise.DoesNotExist:
+            return render(request,'practice/login.html', {'error_message': '用户名或密码错误'})
+        else:
+            password = user.ent_pwd
     elif role_id == 4:  #如果是以学生身份登录，则从Student中查找，stu_id与user_id相等的一条student的数据
-        user = Student.objects.get(stu_id=user_id)
-        password = user.stu_pwd
+        try:
+            user = Student.objects.get(stu_id=user_id)
+        except Student.DoesNotExist:
+            return render(request,'practice/login.html', {'error_message': '用户名或密码错误'})
+        else:
+            password = user.stu_pwd
     if user is not None and user_pwd == password:       #登录成功
         session['role_id'] = role_id
         session['user_id'] = user_id
         print(session.items())
         return redirect(reverse('practice.' + role[role_id] +':index'))
     else:
-        return redirect(reverse('practice:login'))
+        return redirect(reverse('practice:login'), {'error_message': '用户名或密码错误'})
 
 
 #退出登录操作，重定向到登陆页面

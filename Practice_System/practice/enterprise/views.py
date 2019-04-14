@@ -1,9 +1,16 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-
+from django.shortcuts import render,redirect,reverse
+from practice import daoapp
 
 def index(request):
-    return render(request, 'practice/index.html')
+    session = request.session
+    if 'role_id' in session.keys() and 'user_id' in session.keys():
+        role_id = session['role_id']
+        menu = daoapp.getMenu(role_id=role_id)
+        print(menu)
+        return render(request, 'practice/index.html', {'menu': menu})
+    else:
+        return redirect(reverse('practice:login'))
 
 # 响应显示个人信息的请求
 def profile(request):

@@ -18,7 +18,7 @@
 <body>
     <div class="login-logo"><h1>实习对接系统登录</h1></div>
     <div class="login-box">
-        <form class="layui-form layui-form-pane" action="{% url 'practice:dologin' %}" method="post">
+        <form class="layui-form layui-form-pane" action="{% url 'practice:login' %}" method="post">
             {% csrf_token %}
             <label class="login-title" for="role_id">身份</label>
             <div class="layui-form-item">
@@ -46,6 +46,9 @@
                   <input type="text" name="password" lay-verify="required" placeholder="请输入你的密码" autocomplete="off" class="layui-input">
                 </div>
             </div>
+            {% if error_message %}
+            <script>alert('{{ error_message }}');</script>
+            {% endif %}
             <div class="form-actions">
                 <button class="btn btn-warning pull-right" lay-submit lay-filter="login"  type="submit">登录</button> 
                 <div class="forgot"><a href="#" class="forgot">忘记帐号或者密码</a></div>     

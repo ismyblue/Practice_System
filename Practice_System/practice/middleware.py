@@ -11,7 +11,7 @@ class AccessMiddleware(MiddlewareMixin):
     def process_request(self, request):
         session = request.session
         if not request.path.startswith('/admin/') and request.path not in ['/practice/login/', '/practice/',
-                                            '/practice/dologin/', '/practice/logout/', '/practice/index/']:
+                                                                        '/practice/logout/', '/practice/index/']:
             print(session.keys())
             if not 'role_id' in session.keys():
                 session['role_id'] = -1
