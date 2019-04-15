@@ -1,0 +1,95 @@
+{% extends 'practice/template.html' %}
+
+{% block frame %}
+<!-- 右侧内容框架，更改从这里开始 -->
+<span class="x-right" style="line-height:40px">共有职位：{{ jobs|length }}条</span>
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th>
+            序号
+        </th>
+        <th>
+            职位名称
+        </th>
+        <th>
+            数量
+        </th>
+        <th>
+            薪水
+        </th>
+        <th>
+            工作小时
+        </th>
+        <th>
+            公司
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for job in jobs %}
+    <tr>
+        <td>
+            {{ forloop.counter }}
+        </td>
+        <td>
+            <u style="cursor:pointer" onclick="member_show('{{ job.job_name }}','/practice/{{ role_name }}/showjob/?job_id={{ job.job_id }}','800','500')">
+                {{ job.job_name }}
+            </u>
+        </td>
+        <td >
+            {{ job.employ_num }}
+        </td>
+        <td >
+            {{ job.salary }}
+        </td>
+        <td >
+            {{ job.job_time }}
+        </td>
+        <td class="td-status">
+            <span class="layui-btn layui-btn-normal layui-btn-mini">
+                <a href="/practice/{{ role_name }}/information/?ent_id={{ job.ent_id.ent_id }}">{{ job.ent_id.ent_name }}</a>
+            </span>
+        </td>
+        <td class="td-manage">
+            已投递
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!-- 右侧内容框架，更改从这里结束 -->
+
+<!-- 页面动态效果 -->
+<script>
+
+         /*用户-添加*/
+        function member_add(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+
+        /*用户-查看*/
+        function member_show(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+
+        // 用户-编辑
+        function member_edit (title,url,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+
+        /*用户-删除*/
+        function member_del(obj, job_id){
+            layer.confirm('确认要删除吗？',function(index){
+                //发异步删除数据
+                $.ajax({url:"/practice/enterprise/deletejob/?job_id=" + job_id,async:false});
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!',{icon:1,time:1000});
+            });
+        }
+
+        </script>
+{% endblock %}

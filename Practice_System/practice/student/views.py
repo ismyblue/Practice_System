@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,reverse,redirect
 
 from practice import daoapp
-from practice.models import Student
+from practice.models import Student,Job,Choice
 from Practice_System.settings import BASE_DIR
 
 import os
@@ -83,22 +83,70 @@ def __handle_uploaded_file(file, url):
     return True
 
 
-
-
-
-# 响应显示岗位管理的请求
-def postmanage(request):
-    pass
-
-
 # 响应显示岗位浏览的请求
 def browsejobs(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, stu_id)
+    jobs = list(Job.objects.all())
+    choice = Choice.objects.filter(stu_id=stu_id)
+    print(jobs)
+    for c in choice:
+        jobs.remove(c.job_id)
+    context['jobs'] = jobs
+    context['role_name'] = 'student'
+    return render(request, 'practice/browsejobs.html', context)
+
+
+# 响应显示岗位详情的请求
+def showjob(request):
+    job_id = int(request.GET['job_id'])
+    job = Job.objects.get(job_id=job_id)
+    return render(request, 'practice/showjob.html', {'job': job})
+
+
+# 响应显示企业详情的请求
+def information(request):
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    ent_id = int(request.GET['ent_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    username = daoapp.getUsername(role_id, stu_id)
+    information = daoapp.getInformations(role_id=3, user_id=ent_id) # 企业的详细信息
+    return render(request, 'practice/index.html', {'menu': menu, 'information': information, 'username': username,
+                                                   'role_name': 'student'})
+
+
+# 响应发送简历的请求
+def sendresume(request):
+    job_id = int(request.GET['job_id'])
+    stu_id = request.session['user_id']
+    job = Job.objects.get(job_id=job_id)
+    student = Student.objects.get(stu_id=stu_id)
+    choice = Choice(job_id=job, stu_id=student, result=False)
+    choice.save()
+    return redirect('practice.student:applied')
 
 
 # 响应显示已申请岗的请求
 def applied(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, stu_id)
+    choice = Choice.objects.filter(stu_id=stu_id)
+    jobs = []
+    for c in choice:
+        jobs.append(c.job_id)
+    context['jobs'] = jobs
+    context['role_name'] = 'student'
+    return render(request, 'practice/applied.html', context)
 
 
 # 响应显示协议管理的请求

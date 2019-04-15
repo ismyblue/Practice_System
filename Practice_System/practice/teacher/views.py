@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect,reverse
 
 from practice import daoapp
-from practice.models import Teacher
+from practice.models import Teacher,Job
 
 
 # 响应显示主页的请求
@@ -51,14 +51,39 @@ def profile(request):
         return redirect('practice.teacher:index')
 
 
-# 响应显示岗位管理的请求
-def postmanage(request):
-    pass
-
-
 # 响应显示岗位浏览的请求
 def browsejobs(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, tea_id)
+    jobs = Job.objects.all()
+    context['jobs'] = jobs
+    context['role_name'] = 'teacher'
+    return render(request, 'practice/browsejobs.html', context)
+
+
+# 响应显示岗位详情的请求
+def showjob(request):
+    job_id = int(request.GET['job_id'])
+    job = Job.objects.get(job_id=job_id)
+    return render(request, 'practice/showjob.html', {'job': job})
+
+
+# 响应显示企业详情的请求
+def information(request):
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    ent_id = int(request.GET['ent_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    username = daoapp.getUsername(role_id, tea_id)
+    information = daoapp.getInformations(role_id=3, user_id=ent_id) # 企业的详细信息
+    return render(request, 'practice/index.html', {'menu': menu, 'information': information, 'username': username,
+                                                   'role_name': 'teacher'})
+
 
 
 # 响应显示学生管理的请求

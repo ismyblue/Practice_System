@@ -150,8 +150,8 @@ class Job(models.Model):
 class Choice(models.Model):
     choice_id = models.IntegerField(primary_key=True)
     job_id = models.ForeignKey(Job, db_column='job_id', on_delete=models.CASCADE)
-    stu_id = models.ForeignKey(Student, db_column='stu_id',   on_delete=models.CASCADE)
-    result = models.CharField(max_length=10)
+    stu_id = models.ForeignKey(Student, db_column='stu_id', on_delete=models.CASCADE)
+    result = models.BooleanField()
 
     # 在admin管理app中显示的名称
     def __str__(self):
