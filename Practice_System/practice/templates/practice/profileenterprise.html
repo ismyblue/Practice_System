@@ -1,0 +1,75 @@
+{% extends 'practice/template.html' %}
+
+<!--主框架信息块-->
+{% block frame %}
+<!-- 右侧内容框架，更改从这里开始 -->
+<form  class="layui-form" action="{% url 'practice.enterprise:profile' %}" method="post" >
+    {% csrf_token %}
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">编号</label>
+            <div class="layui-input-inline">
+                <input type="text" disabled lay-verify="title" autocomplete="off" class="layui-input" value="{{ ent_id }}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">原密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">联系方式</label>
+            <div class="layui-input-inline">
+                <input type="tel" name="phone" lay-verify="phone" autocomplete="off" class="layui-input" value="{{ ent_phone }}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input" value="{{ ent_email }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">公司名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="ent_name"  lay-verify="title" autocomplete="off" class="layui-input" value="{{ ent_name }}">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">公司介绍</label>
+        <div class="layui-input-block">
+            <textarea name="introduction" placeholder="请输入内容" class="layui-textarea" >{{ introduction }}</textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-block">
+            <input type="text" name="address" lay-verify="title" autocomplete="off" class="layui-input" value="{{ ent_address }}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">负责人</label>
+        <div class="layui-input-block">
+            <input type="text" name="principal" lay-verify="title" autocomplete="off" class="layui-input" value="{{ principal }}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+

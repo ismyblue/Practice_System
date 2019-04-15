@@ -10,31 +10,25 @@ class AccessMiddleware(MiddlewareMixin):
     # 处理用户请求
     def process_request(self, request):
         session = request.session
+        if not 'role_id' in session.keys():
+            session['role_id'] = -1
         if not request.path.startswith('/admin/') and not request.path.startswith('/media/') \
                 and request.path not in ['/practice/login/', '/practice/', '/practice/logout/', '/practice/index/']:
-            print(session.items())
-            if not 'role_id' in session.keys():
-                session['role_id'] = -1
             role_id = int(session['role_id'])
             #获取此角色可访问的媒体资源列表
             # resource = daoapp.getResource(role_id)
             # if request.path not in resource:
             #     return redirect(reverse('practice:index'))
-            if role_id == 1:
-                if not request.path.startswith('/practice/admin/'):
-                    print(role_id, request.path)
-                    return redirect(reverse('practice:index'))
+            if role_id == -1:
+                return redirect(reverse('practice:index'))
             elif role_id == 2:
                 if not request.path.startswith('/practice/teacher/'):
-                    print(role_id, request.path)
                     return redirect(reverse('practice:index'))
             elif role_id == 3:
                 if not request.path.startswith('/practice/enterprise/'):
-                    print(role_id, request.path)
                     return redirect(reverse('practice:index'))
             elif role_id == 4:
                 if not request.path.startswith('/practice/student/'):
-                    print(role_id, request.path)
                     return redirect(reverse('practice:index'))
 
 

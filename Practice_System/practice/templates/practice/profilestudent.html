@@ -1,0 +1,144 @@
+{% extends 'practice/template.html' %}
+
+<!--主框架信息块-->
+{% block frame %}
+<!-- 右侧内容框架，更改从这里开始 -->
+<form enctype="multipart/form-data" class="layui-form" action="{% url 'practice.student:profile' %}" method="post" >
+  {% csrf_token %}
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">学号</label>
+      <div class="layui-input-inline">
+        <input type="text" disabled lay-verify="title" autocomplete="off" class="layui-input" value="{{ stu_id }}">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">原密码</label>
+      <div class="layui-input-inline">
+        <input type="password" name="password" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">姓名</label>
+      <div class="layui-input-inline">
+        <input type="text" disabled lay-verify="title" autocomplete="off" class="layui-input" value="{{ stu_name }}">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">年龄</label>
+      <div class="layui-input-inline">
+        <input type="text" name="age" lay-verify="number" autocomplete="off" class="layui-input" value="{{ stu_age }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">联系方式</label>
+      <div class="layui-input-inline">
+        <input type="tel" name="phone" lay-verify="phone" autocomplete="off" class="layui-input" value="{{ phone_num }}">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">邮箱</label>
+      <div class="layui-input-inline">
+        <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input" value="{{ e_mail }}">
+      </div>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">三方协议</label>
+      <div class="layui-input-inline">
+        <input type="checkbox" {% if tripartite_agreement == True %}checked="checked" {% endif %}name="tripartite" lay-skin="switch" lay-text="True|False">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">实习协议</label>
+      <div class="layui-input-inline">
+        <input type="checkbox" {% if practice_agreement == True %}checked="checked" {% endif %}name="practice" lay-skin="switch"  lay-text="True|False">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">劳动合同</label>
+      <div class="layui-input-inline">
+        <input type="checkbox" {% if employment_agreement == True %}checked="checked" {% endif %}name="employment" lay-skin="switch" lay-text="True|False">
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">年级</label>
+    <div class="layui-input-block">
+      <select name="grade" >
+        <option value="1" {% if grade == 1 %}selected="selected"{% endif %}>大一</option>
+        <option value="2" {% if grade == 2 %}selected="selected"{% endif %}>大二</option>
+        <option value="3" {% if grade == 3 %}selected="selected"{% endif %}>大三</option>
+        <option value="4" {% if grade == 4 %}selected="selected"{% endif %}>大四</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">班级</label>
+    <div class="layui-input-block">
+      <input type="text" name="class" lay-verify="title" autocomplete="off" class="layui-input" value="{{ stu_class }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">所学专业</label>
+    <div class="layui-input-block">
+      <input type="text" name="major" lay-verify="title" autocomplete="off" class="layui-input" value="{{ major }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-block">
+      <input type="text" name="address" lay-verify="title" autocomplete="off" class="layui-input" value="{{ address }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">政治面貌</label>
+    <div class="layui-input-block">
+      <input type="text" name="politicalstatus" lay-verify="title" autocomplete="off" class="layui-input" value="{{ political_status }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">目标岗位</label>
+    <div class="layui-input-block">
+      <input type="text" name="targetpost" lay-verify="title" autocomplete="off" class="layui-input" value="{{ target_post }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">意向地区</label>
+    <div class="layui-input-block">
+      <input type="text" name="intentionarea" lay-verify="title" autocomplete="off" class="layui-input" value="{{ intention_area }}">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">简历</label>
+    <div class="layui-input-block">
+      <input type="file" name="resume" lay-verify="title" autocomplete="off" class="layui-input" >
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+
+</form>
+{% endblock %}

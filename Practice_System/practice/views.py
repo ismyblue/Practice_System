@@ -52,7 +52,6 @@ def login(request):
     if user is not None and user_pwd == password:       #登录成功
         session['role_id'] = role_id
         session['user_id'] = user_id
-        print(session.items())
         return redirect(reverse('practice.' + role[role_id] +':index'))
     else:
         return redirect(reverse('practice:login'), {'error_message': '用户名或密码错误'})
