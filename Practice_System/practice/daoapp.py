@@ -1,5 +1,16 @@
 from practice.models import *
 
+# def getContext(request):
+#     session = request.session
+#     role_id = int(session['role_id'])
+#     ent_id = int(session['user_id'])
+#     context = {}
+#     menu = getMenu(role_id=role_id)
+#     username = getUsername(role_id, ent_id)
+#     context['menu'] = menu
+#     context['username'] = username
+
+
 def getMenu(role_id):
     '''
     通过role_id获取此角色所有菜单
@@ -115,6 +126,16 @@ def getProfile(role_id, user_id):
         student = Student.objects.get(stu_id=user_id)
         profile = __getStudentProfile(student)
     return profile
+
+
+def getJobs(ent_id):
+    '''
+    获取所有发布的岗位
+    :param ent_id: 企业id
+    :return: list
+    '''
+    jobs = Job.objects.filter(ent_id=ent_id)
+    return jobs
 
 
 def __getStudentInformations(student):
