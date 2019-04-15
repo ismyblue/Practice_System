@@ -22,7 +22,7 @@
     <div class="page-content">
         <div class="content">
             <!-- 右侧内容框架，更改从这里开始 -->
-            <form class="layui-form" method="post" action="/practice/enterprise/updatejob/?job_id={{ job.job_id }}">
+            <form class="layui-form" method="post" action="/practice/enterprise/updatejob/{{ job.job_id }}/">
                 {% csrf_token %}
                 <div class="layui-form-item">
                     <div class="layui-form-item layui-form-text">

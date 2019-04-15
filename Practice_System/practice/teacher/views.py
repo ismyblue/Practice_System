@@ -32,7 +32,6 @@ def profile(request):
     context = profile.copy()
     context['menu'] = menu
     context['username'] = username
-    print(context)
     if request.method == 'GET':
         return render(request, 'practice/profileteacher.html', context)
     elif request.method == 'POST':
@@ -66,18 +65,16 @@ def browsejobs(request):
 
 
 # 响应显示岗位详情的请求
-def showjob(request):
-    job_id = int(request.GET['job_id'])
+def showjob(request, job_id):
     job = Job.objects.get(job_id=job_id)
     return render(request, 'practice/showjob.html', {'job': job})
 
 
 # 响应显示企业详情的请求
-def information(request):
+def information(request, ent_id):
     session = request.session
     role_id = int(session['role_id'])
     tea_id = int(session['user_id'])
-    ent_id = int(request.GET['ent_id'])
     menu = daoapp.getMenu(role_id=role_id)
     username = daoapp.getUsername(role_id, tea_id)
     information = daoapp.getInformations(role_id=3, user_id=ent_id) # 企业的详细信息

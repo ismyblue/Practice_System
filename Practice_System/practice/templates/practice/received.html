@@ -2,7 +2,7 @@
 
 {% block frame %}
 <!-- 右侧内容框架，更改从这里开始 -->
-<span class="x-right" style="line-height:40px">共有职位：{{ jobs|length }}条</span>
+<span class="x-right" style="line-height:40px">共有职位：{{ choices|length }}条</span>
 <table class="layui-table">
     <thead>
     <tr>
@@ -22,7 +22,7 @@
             工作小时
         </th>
         <th>
-            公司
+            意向者
         </th>
         <th>
             操作
@@ -30,38 +30,39 @@
     </tr>
     </thead>
     <tbody>
-    {% for job in jobs %}
+    {% for choice in choices %}
     <tr>
         <td>
             {{ forloop.counter }}
         </td>
         <td>
-            <u style="cursor:pointer" onclick="member_show('{{ job.job_name }}','/practice/{{ role_name }}/showjob/{{ job.job_id }}/','800','500')">
-                {{ job.job_name }}
+            <u style="cursor:pointer" onclick="member_show('{{ choice.job_id.job_name }}','/practice/enterprise/showjob/{{ choice.job_id.job_id }}/','800','500')">
+                {{ choice.job_id.job_name }}
             </u>
         </td>
         <td >
-            {{ job.employ_num }}
+            {{ choice.job_id.employ_num }}
         </td>
         <td >
-            {{ job.salary }}
+            {{ choice.job_id.salary }}
         </td>
         <td >
-            {{ job.job_time }}
+            {{ choice.job_id.job_time }}
         </td>
         <td class="td-status">
-            <span class="layui-btn layui-btn-normal layui-btn-mini">
-                <a href="/practice/{{ role_name }}/information/{{ job.ent_id.ent_id }}/">{{ job.ent_id.ent_name }}</a>
-            </span>
+            <u><a href="/practice/enterprise/information/{{ choice.stu_id.stu_id }}/">{{ choice.stu_id.stu_name }}</a></u>
         </td>
         <td class="td-manage">
-            {% if role_name == 'student' %}
-            <u style="cursor:pointer" >
-                 <a href="/practice/student/sendresume/{{ job.job_id }}/">投递简历</a>
-            </u>
-            {% else %}
-                 可浏览
-            {% endif %}
+            {% if not choice.result %}
+            <a title="选择" href="/practice/enterprise/select/{{ choice.job_id.job_id }}/{{ choice.stu_id.stu_id }}/"
+               class="ml-5" style="text-decoration:none">
+                选择
+            </a>
+            {% endif %}&nbsp;&nbsp;
+            <a title="删除" href="javascript:;" onclick="member_del(this, {{ choice.job_id.job_id }}, {{ choice.stu_id.stu_id }})"
+               style="text-decoration:none">
+                删除
+            </a>
         </td>
     </tr>
     {% endfor %}
@@ -72,26 +73,16 @@
 <!-- 页面动态效果 -->
 <script>
 
-         /*用户-添加*/
-        function member_add(title,url,w,h){
-            x_admin_show(title,url,w,h);
-        }
-
         /*用户-查看*/
         function member_show(title,url,w,h){
             x_admin_show(title,url,w,h);
         }
 
-        // 用户-编辑
-        function member_edit (title,url,w,h) {
-            x_admin_show(title,url,w,h); 
-        }
-
         /*用户-删除*/
-        function member_del(obj, job_id){
+        function member_del(obj, job_id, stu_id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.ajax({url:"/practice/enterprise/deletejob/" + job_id +"/",async:false});
+                $.ajax({url:"/practice/enterprise/deletechoice/"+ job_id +"/" + stu_id,async:false});
                 $(obj).parents("tr").remove();
                 layer.msg('已删除!',{icon:1,time:1000});
             });

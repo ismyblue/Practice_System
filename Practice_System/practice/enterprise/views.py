@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect,reverse
 from practice import daoapp
-from practice.models import Enterprise,Job
+from practice.models import Enterprise,Job, Choice
 
 
 def index(request):
@@ -30,6 +30,7 @@ def profile(request):
     context = profile.copy()
     context['menu'] = menu
     context['username'] = username
+    context['role_name'] = 'enterprise'
     if request.method == 'GET':
         return render(request, 'practice/profileenterprise.html', context)
     elif request.method == 'POST':
@@ -84,17 +85,15 @@ def addjob(request):
         return HttpResponse('success')
 
 # 响应显示岗位的请求
-def showjob(request):
-    job_id = int(request.GET['job_id'])
+def showjob(request, job_id):
     job = Job.objects.get(job_id=job_id)
     return render(request, 'practice/showjob.html', {'job': job})
 
 
 # 响应更新岗位的请求
-def updatejob(request):
+def updatejob(request, job_id):
     session = request.session
     ent_id = int(session['user_id'])
-    job_id = int(request.GET['job_id'])
     job = Job.objects.get(job_id=job_id)
     if request.method == 'GET':
         return render(request, 'practice/updatejob.html', {'job': job})
@@ -110,8 +109,7 @@ def updatejob(request):
 
 
 # 响应删除岗位的请求：
-def deletejob(request):
-    job_id = int(request.GET['job_id'])
+def deletejob(request, job_id):
     ent_id = int(request.session['user_id'])
     job = Job.objects.get(job_id=job_id)
     if ent_id != job.ent_id.ent_id:
@@ -120,19 +118,72 @@ def deletejob(request):
     return HttpResponse('success')
 
 
-# 响应显示简历筛选的请求
-def resumescreening(request):
-    pass
-
-
 # 响应显示已收（简历）的请求
 def received(request):
-    pass
+    role_id = request.session['role_id']
+    ent_id = request.session['user_id']
+    enterprise = Enterprise.objects.get(ent_id=ent_id)
+    jobs = Job.objects.filter(ent_id=enterprise)
+    choices = []
+    for job in jobs:
+        choices += Choice.objects.filter(job_id=job).exclude(result=True)
+    context = {}
+    context['choices'] = choices
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, ent_id)
+    context['role_name'] = 'enterprise'
+    return render(request, 'practice/received.html', context)
+
+
+# 响应显示学生详情的请求
+def information(request, stu_id):
+    session = request.session
+    role_id = int(session['role_id'])
+    ent_id = int(session['user_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    username = daoapp.getUsername(role_id, ent_id)
+    information = daoapp.getInformations(role_id=4, user_id=stu_id)  # 学生的详细信息
+    return render(request, 'practice/index.html', {'menu': menu, 'information': information, 'username': username,
+                                                   'role_name': 'enterprise'})
+
+
+# 响应选择学生的请求
+def select(request, job_id, stu_id):
+    choice = Choice.objects.get(job_id=job_id, stu_id=stu_id)
+    if choice.job_id.ent_id.ent_id == request.session['user_id']:
+        choice.result = True
+        choice.save()
+        return redirect(reverse('practice.enterprise:selected'))
+    else:
+       return render(request, 'practice/error.html', {'error_message': '没有权限'})
+
+
+
+# 响应删除学生的请求
+def deletechoice(request, job_id, stu_id):
+    choice = Choice.objects.get(job_id=job_id, stu_id=stu_id)
+    if choice.job_id.ent_id.ent_id == request.session['user_id']:
+        choice.delete()
+        return HttpResponse('success')
+    else:
+        return render(request, 'practice/error.html', {'error_message': '没有权限'})
 
 
 # 响应显示已选（简历）的请求
 def selected(request):
-    pass
+    role_id = request.session['role_id']
+    ent_id = request.session['user_id']
+    enterprise = Enterprise.objects.get(ent_id=ent_id)
+    jobs = Job.objects.filter(ent_id=enterprise)
+    choices = []
+    for job in jobs:
+        choices += Choice.objects.filter(job_id=job, result=True)
+    context = {}
+    context['choices'] = choices
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, ent_id)
+    context['role_name'] = 'enterprise'
+    return render(request, 'practice/received.html', context)
 
 
 # 响应显示实习生管理的请求

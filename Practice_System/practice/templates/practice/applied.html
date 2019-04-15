@@ -36,7 +36,7 @@
             {{ forloop.counter }}
         </td>
         <td>
-            <u style="cursor:pointer" onclick="member_show('{{ job.job_name }}','/practice/{{ role_name }}/showjob/?job_id={{ job.job_id }}','800','500')">
+            <u style="cursor:pointer" onclick="member_show('{{ job.job_name }}','/practice/{{ role_name }}/showjob/{{ job.job_id }}/','800','500')">
                 {{ job.job_name }}
             </u>
         </td>
@@ -51,7 +51,7 @@
         </td>
         <td class="td-status">
             <span class="layui-btn layui-btn-normal layui-btn-mini">
-                <a href="/practice/{{ role_name }}/information/?ent_id={{ job.ent_id.ent_id }}">{{ job.ent_id.ent_name }}</a>
+                <a href="/practice/{{ role_name }}/information/{{ job.ent_id.ent_id }}/">{{ job.ent_id.ent_name }}</a>
             </span>
         </td>
         <td class="td-manage">
@@ -85,7 +85,7 @@
         function member_del(obj, job_id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.ajax({url:"/practice/enterprise/deletejob/?job_id=" + job_id,async:false});
+                $.ajax({url:"/practice/enterprise/deletejob/" + job_id + "/",async:false});
                 $(obj).parents("tr").remove();
                 layer.msg('已删除!',{icon:1,time:1000});
             });

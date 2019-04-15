@@ -31,7 +31,7 @@ def profile(request):
     context = profile.copy()
     context['menu'] = menu
     context['username'] = username
-
+    context['role_name'] = 'student'
     if request.method == 'GET':
         return render(request, 'practice/profilestudent.html', context )
     elif request.method == 'POST':
@@ -93,7 +93,6 @@ def browsejobs(request):
     context['username'] = daoapp.getUsername(role_id, stu_id)
     jobs = list(Job.objects.all())
     choice = Choice.objects.filter(stu_id=stu_id)
-    print(jobs)
     for c in choice:
         jobs.remove(c.job_id)
     context['jobs'] = jobs
@@ -102,18 +101,16 @@ def browsejobs(request):
 
 
 # 响应显示岗位详情的请求
-def showjob(request):
-    job_id = int(request.GET['job_id'])
+def showjob(request, job_id):
     job = Job.objects.get(job_id=job_id)
     return render(request, 'practice/showjob.html', {'job': job})
 
 
 # 响应显示企业详情的请求
-def information(request):
+def information(request, ent_id):
     session = request.session
     role_id = int(session['role_id'])
     stu_id = int(session['user_id'])
-    ent_id = int(request.GET['ent_id'])
     menu = daoapp.getMenu(role_id=role_id)
     username = daoapp.getUsername(role_id, stu_id)
     information = daoapp.getInformations(role_id=3, user_id=ent_id) # 企业的详细信息
@@ -122,8 +119,7 @@ def information(request):
 
 
 # 响应发送简历的请求
-def sendresume(request):
-    job_id = int(request.GET['job_id'])
+def sendresume(request, job_id):
     stu_id = request.session['user_id']
     job = Job.objects.get(job_id=job_id)
     student = Student.objects.get(stu_id=stu_id)
