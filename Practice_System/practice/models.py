@@ -151,7 +151,7 @@ class Choice(models.Model):
     choice_id = models.IntegerField(primary_key=True)
     job_id = models.ForeignKey(Job, db_column='job_id', on_delete=models.CASCADE)
     stu_id = models.ForeignKey(Student, db_column='stu_id', on_delete=models.CASCADE)
-    result = models.BooleanField()
+    result = models.BooleanField(default=False)
 
     # 在admin管理app中显示的名称
     def __str__(self):
@@ -162,7 +162,9 @@ class Choice(models.Model):
 class WeekRecord(models.Model):
     weekRecord_id = models.IntegerField(primary_key=True)
     stu_id = models.ForeignKey(Student,  db_column='stu_id', on_delete=models.CASCADE)
-    recordContent = models.CharField(max_length=2048)
+    recordTitle = models.CharField(max_length=256)
+    recordContent = models.CharField(max_length=4096)
+    readed = models.BooleanField(default=False)
 
     # 在admin管理app中显示的名称
     def __str__(self):

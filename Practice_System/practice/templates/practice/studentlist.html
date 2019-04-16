@@ -39,7 +39,7 @@
             {{ forloop.counter }}
         </td>
         <td>
-            <a href="/practice/{{ role_name }}/information{% if role_name == 'teacher' %}{{ student }}{% endif %}/{{ choice.stu_id.stu_id }}/">
+            <a href="/practice/{{ role_name }}/information{% if role_name == 'teacher' %}student{% endif %}/{{ choice.stu_id.stu_id }}/">
                 <u>{{ choice.stu_id.stu_name }}</u>
             </a>
         </td>

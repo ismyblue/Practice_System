@@ -11,7 +11,8 @@ urlpatterns = [
     path('informationstudent/<int:stu_id>/', views.informationstudent, name='informationstudent'),
     path('studentmanage/', views.studentmanage, name='studentmanage'),
     path('mark/<int:stu_id>/<int:score>/', views.mark, name='mark'), # 为学生打分
-    path('browseweeklyreport/', views.browseweeklyreport, name='browseweeklyreport'),
     path('unread/', views.unread, name='unread'),
+    path('doread/<int:weekRecord_id>/', views.doread, name='unread'),
+    path('showreport/<int:weekRecord_id>/', views.showreport, name='showreport'),  # 展示report
     path('readed/', views.readed, name='readed'),
 ]

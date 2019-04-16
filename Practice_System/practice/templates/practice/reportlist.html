@@ -1,0 +1,110 @@
+{% extends 'practice/template.html' %}
+
+{% block frame %}
+<!-- 右侧内容框架，更改从这里开始 -->
+<span class="x-right" style="line-height:40px">共有职位：{{ weekRecords|length }}条</span>
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th>
+            序号
+        </th>
+        <th>
+            周记标题
+        </th>
+        {% if role_name == 'teacher' %}
+        <th>
+            学生
+        </th>
+        {% endif %}
+        {% if role_name == 'student' %}
+        <th>
+            阅读情况
+        </th>
+        {% endif %}
+        <th>
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for weekRecord in weekRecords %}
+    <tr>
+        <td>
+            {{ forloop.counter }}
+        </td>
+        <td>
+            <u style="cursor:pointer" onclick="member_show('{{ weekRecord.recordTitle }}','/practice/{{ role_name }}/showreport/{{ weekRecord.weekRecord_id }}/','800','500')">
+                {{ weekRecord.recordTitle }}
+            </u>
+        </td>
+        {% if role_name == 'teacher' %}
+        <td>
+            <a href="/practice/teacher/informationstudent/{{ weekRecord.stu_id.stu_id }}">
+                <u>{{ weekRecord.stu_id.stu_name }}</u>
+            </a>
+        </td>
+        {% endif %}
+        {% if role_name == 'student' %}
+            {% if weekRecord.readed %}
+            <td>
+                <u style="color:red">已被阅读</u>
+            </td>
+            {% else %}
+            <td>
+                <u>未被阅读</u>
+            </td>
+            {% endif %}
+        {% endif %}
+        <td class="td-manage">
+            {% if role_name == 'teacher' %}
+            {% if readed %}
+            <u style="color:red">已阅读</u>
+            {% else %}
+            <a title="标记阅读" href="/practice/{{ role_name }}/doread/{{ weekRecord.weekRecord_id }}/"
+               class="ml-5" style="text-decoration:none">
+                <u>标记阅读</u>
+            </a>
+            {% endif %}
+            {% else %}
+            <a title="编辑" href="/practice/{{ role_name }}/editreport/{{ weekRecord.weekRecord_id }}/"
+               class="ml-5" style="text-decoration:none">
+                <i class="layui-icon">&#xe642;</i>
+            </a>
+            <a title="删除" href="javascript:;" onclick="member_del(this, {{ weekRecord.weekRecord_id }})"
+               style="text-decoration:none">
+                <i class="layui-icon">&#xe640;</i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!-- 右侧内容框架，更改从这里结束 -->
+
+<!-- 页面动态效果 -->
+<script>
+
+        /*用户-查看*/
+        function member_show(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
+
+        // 用户-编辑
+        function member_edit (title,url,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
+
+        /*用户-删除*/
+        function member_del(obj, weekRecord_id){
+            layer.confirm('确认要删除吗？',function(index){
+                //发异步删除数据
+                $.ajax({url:"/practice/{{ role_name }}/deletereport/" + weekRecord_id +"/",async:false});
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!',{icon:1,time:1000});
+            });
+        }
+
+        </script>
+{% endblock %}

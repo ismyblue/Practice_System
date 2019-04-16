@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,reverse,redirect
 
 from practice import daoapp
-from practice.models import Student,Job,Choice
+from practice.models import Student, Job, Choice, WeekRecord
 from Practice_System.settings import BASE_DIR
 
 import os
@@ -142,36 +142,92 @@ def applied(request):
     return render(request, 'practice/applied.html', context)
 
 
-# 响应显示协议管理的请求
-def protocol(request):
-    pass
-
-
-# 响应显示实习协议的请求
-def internship(request):
-    pass
-
-
-# 响应显示三方协议的请求
-def tripartite(request):
-    pass
-
-
-# 响应显示就业协议的请求
-def employment(request):
-    pass
-
-
-# 响应显示实习周记的请求
-def weeklyreport(request):
-    pass
-
 # 响应显示新建周记的请求
 def newreport(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, stu_id)
+    context['role_name'] = 'student'
+    return render(request, 'practice/newreport.html', context)
 
 
-# 响应显示已写周记的请求
+# 响应显示保存周记的请求
+def savereport(request):
+    session = request.session
+    stu_id = int(session['user_id'])
+    recordTitle = request.POST['recordTitle']
+    recordContent = request.POST['recordContent']
+    student = Student.objects.get(stu_id=stu_id)
+    weekrecored = WeekRecord(stu_id=student, recordTitle=recordTitle, recordContent=recordContent)
+    weekrecored.save()
+    return redirect('practice.student:reporthistory')
+
+
+# 响应修改周记请求
+def editreport(request, weekRecord_id):
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, stu_id)
+    context['role_name'] = 'student'
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if weekRecord.weekRecord_id != weekRecord_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有更新的权限！'})
+    context['weekRecord'] = weekRecord
+    context['update'] = True
+    return render(request, 'practice/newreport.html', context)
+
+
+# 响应更新周记，保存至数据库
+def updatereport(request, weekRecord_id):
+    stu_id = request.session['user_id']
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if request.method != 'POST' or stu_id != weekRecord.stu_id.stu_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有更新的权限！'})
+    weekRecord.recordContent = request.POST['recordContent']
+    weekRecord.recordTitle = request.POST['recordTitle']
+    weekRecord.save()
+    return redirect('practice.student:reporthistory')
+
+
+# 响应删除周记的请求
+def deletereport(request, weekRecord_id):
+    stu_id = request.session['user_id']
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if stu_id != weekRecord.stu_id.stu_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有更新的权限！'})
+    print(weekRecord)
+    weekRecord.delete()
+    return redirect('practice.student:reporthistory')
+
+
+# 响应显示展示周记的页面请求
+def showreport(request, weekRecord_id):
+    stu_id = request.session['user_id']
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if weekRecord.stu_id.stu_id != stu_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有查看的权限！'})
+    return render(request, 'practice/showreport.html', {'weekRecord': weekRecord})
+
+
+# 响应显示已写周记菜单页面的请求
 def reporthistory(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    stu_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, stu_id)
+    context['role_name'] = 'student'
+    student = Student.objects.get(stu_id=stu_id)
+    weekRecords = WeekRecord.objects.filter(stu_id=student)
+    context['weekRecords'] = weekRecords
+    return render(request, 'practice/reportlist.html', context)
+
+
 

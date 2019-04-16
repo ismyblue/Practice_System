@@ -1,0 +1,37 @@
+{% extends 'practice/template.html' %}
+
+{% block frame %}
+<!-- 右侧内容框架，更改从这里开始 -->
+{% if update %}
+<form class="layui-form" method="post" action="/practice/student/updatereport/{{ weekRecord.weekRecord_id }}/">
+{% else %}
+<form class="layui-form" method="post" action="/practice/student/savereport/">
+{% endif %}
+    {% csrf_token %}
+    <div class="layui-form-item">
+        <div class="layui-block">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="tel" name="recordTitle" placeholder="请输入标题 " autocomplete="off" class="layui-input" value="{{ weekRecord.recordTitle }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">周记内容</label>
+            <div class="layui-input-block">
+                <textarea name="recordContent" placeholder="请输入内容" rows="15" class="layui-textarea" >{{ weekRecord.recordContent }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!-- 右侧内容框架，更改从这里结束 -->
+{% endblock %}

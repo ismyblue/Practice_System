@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect,reverse
 
 from practice import daoapp
-from practice.models import Teacher, Job, Student, Choice
+from practice.models import Teacher, Job, Student, Choice, WeekRecord
 
 
 # 响应显示主页的请求
@@ -82,7 +82,7 @@ def information(request, ent_id):
                                                    'role_name': 'teacher'})
 
 
-# 响应显示企业详情的请求
+# 响应显示学生详情的请求
 def informationstudent(request, stu_id):
     session = request.session
     role_id = int(session['role_id'])
@@ -122,17 +122,60 @@ def mark(request, stu_id, score):
     student.save()
     return redirect(reverse('practice.teacher:studentmanage'))
 
-# 响应显示浏览简历的请求
-def browseweeklyreport(request):
-    pass
-
 
 # 响应显示未读（周报）的请求
 def unread(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, tea_id)
+    context['role_name'] = 'teacher'
+    teacher = Teacher.objects.get(tea_id=tea_id)
+    students = Student.objects.filter(tea_id=teacher)
+    weekRecords = []
+    for s in students:
+        weekRecords += list(WeekRecord.objects.filter(stu_id=s, readed=False))
+    context['weekRecords'] = weekRecords
+    return render(request, 'practice/reportlist.html', context)
+
+
+# 响应阅读周报的请求
+def doread(request, weekRecord_id):
+    tea_id = request.session['user_id']
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if weekRecord.stu_id.tea_id.tea_id != tea_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有阅读的权限！'})
+    weekRecord.readed = True
+    weekRecord.save()
+    return redirect(reverse('practice.teacher:readed'))
+
+
+# 响应显示周报详情的请求
+def showreport(request, weekRecord_id):
+    tea_id = request.session['user_id']
+    weekRecord = WeekRecord.objects.get(weekRecord_id=weekRecord_id)
+    if weekRecord.stu_id.tea_id.tea_id != tea_id:
+        return render(request, 'practice/error.html', {'error_message': '您没有查看的权限！'})
+    return render(request, 'practice/showreport.html', {'weekRecord': weekRecord})
 
 
 # 响应显示已读（周报）的请求
 def readed(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, tea_id)
+    context['role_name'] = 'teacher'
+    teacher = Teacher.objects.get(tea_id=tea_id)
+    students = Student.objects.filter(tea_id=teacher)
+    weekRecords = []
+    for s in students:
+        weekRecords += list(WeekRecord.objects.filter(stu_id=s, readed=True))
+    context['weekRecords'] = weekRecords
+    context['readed'] = True
+    return render(request, 'practice/reportlist.html', context)
 

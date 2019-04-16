@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>实习对接系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{% static 'practice/css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'practice/css/xadmin.css' %}">
+    <link rel="stylesheet" href="{% static 'practice/css/swiper.min.css' %}">
+    <script type="text/javascript" src="{% static 'practice/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'practice/js/swiper.jquery.min.js' %}"></script>
+    <script src="{% static 'practice/lib/layui/layui.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'practice/js/xadmin.js' %}"></script>
+
+</head>
+<body>
+<!-- 中部开始 -->
+<div class="wrapper">
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="content">
+            <!-- 右侧内容框架，更改从这里开始 -->
+            <div class="layui-form-item">
+                <div class="layui-block">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-block">
+                        <input type="tel" name="recordTitle" disabled placeholder="请输入标题 " autocomplete="off" class="layui-input" value="{{ weekRecord.recordTitle }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">周记内容</label>
+                    <div class="layui-input-block">
+                        <textarea name="recordContent" disabled placeholder="请输入内容" rows="15" class="layui-textarea" >{{ weekRecord.recordContent }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- 右侧内容框架，更改从这里结束 -->
+        </div>
+    </div>
+    <!-- 右侧主体结束 -->
+</div>
+<!-- 中部结束 -->
+</body>
+</html>
