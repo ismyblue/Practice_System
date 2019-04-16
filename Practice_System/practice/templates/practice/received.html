@@ -58,6 +58,8 @@
                class="ml-5" style="text-decoration:none">
                 选择
             </a>
+            {% else %}
+                <b style="color:red">已选<b>
             {% endif %}&nbsp;&nbsp;
             <a title="删除" href="javascript:;" onclick="member_del(this, {{ choice.job_id.job_id }}, {{ choice.stu_id.stu_id }})"
                style="text-decoration:none">

@@ -10,16 +10,19 @@
             序号
         </th>
         <th>
-            职位名称
+            学生姓名
         </th>
         <th>
-            数量
+            应聘职位
         </th>
         <th>
-            薪水
+            录取状态
         </th>
         <th>
-            工作小时
+            老师打分
+        </th>
+        <th>
+            企业打分
         </th>
         <th>
             公司
@@ -36,30 +39,41 @@
             {{ forloop.counter }}
         </td>
         <td>
+            <a href="/practice/{{ role_name }}/information{% if role_name == 'teacher' %}{{ student }}{% endif %}/{{ choice.stu_id.stu_id }}/">
+                <u>{{ choice.stu_id.stu_name }}</u>
+            </a>
+        </td>
+        <td >
             <u style="cursor:pointer" onclick="member_show('{{ choice.job_id.job_name }}','/practice/{{ role_name }}/showjob/{{ choice.job_id.job_id }}/','800','500')">
                 {{ choice.job_id.job_name }}
             </u>
         </td>
         <td >
-            {{ choice.job_id.employ_num }}
-        </td>
-        <td >
-            {{ choice.job_id.salary }}
-        </td>
-        <td >
-            {{ choice.job_id.job_time }}
-        </td>
-        <td class="td-status">
-            <span class="layui-btn layui-btn-normal layui-btn-mini">
-                <a href="/practice/{{ role_name }}/information/{{ choice.job_id.ent_id.ent_id }}/">{{ choice.job_id.ent_id.ent_name }}</a>
-            </span>
-        </td>
-        <td class="td-manage">
             {% if choice.result %}
             <b style="color: red">已被选择</b>
             {% else %}
-            已投递
+            已申请
             {% endif %}
+        </td>
+        <td >
+            {% if choice.stu_id.tea_mark %}{{ choice.stu_id.tea_mark }}{% else %}无{% endif %}
+        </td>
+        <td >
+            {% if choice.stu_id.ent_mark %}{{ choice.stu_id.ent_mark }}{% else %}无{% endif %}
+        </td>
+        <td class="td-status">
+            <span class="layui-btn layui-btn-normal layui-btn-mini">
+                {% if role_name == 'teacher' %}
+                <a href="/practice/{{ role_name }}/information/{{ choice.job_id.ent_id.ent_id }}/">{{ choice.job_id.ent_id.ent_name }}</a>
+                {% else %}
+                <a href="/practice/{{ role_name }}/">{{ choice.job_id.ent_id.ent_name }}</a>
+                {% endif %}
+            </span>
+        </td>
+        <td class="td-manage">
+            <u style="cursor:pointer" >
+                <a href="javascript:mark({{ choice.stu_id.stu_id }})">评分</a>
+            </u>
         </td>
     </tr>
     {% endfor %}
@@ -70,26 +84,27 @@
 <!-- 页面动态效果 -->
 <script>
 
-         /*用户-添加*/
-        function member_add(title,url,w,h){
-            x_admin_show(title,url,w,h);
-        }
-
         /*用户-查看*/
         function member_show(title,url,w,h){
             x_admin_show(title,url,w,h);
         }
 
-        // 用户-编辑
-        function member_edit (title,url,w,h) {
-            x_admin_show(title,url,w,h); 
+        /*用户-打分*/
+        function mark(stu_id){
+            var score=prompt("请为学生评分","");
+            score = Number(score);
+            if(score > 0 && score <= 100){
+                window.location.href="/practice/{{ role_name }}/mark/" + stu_id + "/" + score + "/";
+            }else{
+                alert('请输入1-100的分数')
+            }
         }
 
-        /*用户-删除*/
-        function member_del(obj, job_id){
+
+        function member_del(obj, choice_id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.ajax({url:"/practice/enterprise/deletejob/" + job_id + "/",async:false});
+                $.ajax({url:"/practice/enterprise/deletechoice/" + choice_id +"/",async:false});
                 $(obj).parents("tr").remove();
                 layer.msg('已删除!',{icon:1,time:1000});
             });

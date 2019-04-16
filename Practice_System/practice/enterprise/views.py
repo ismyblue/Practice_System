@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect,reverse
 from practice import daoapp
-from practice.models import Enterprise,Job, Choice
+from practice.models import Enterprise,Job, Choice, Student
 
 
 def index(request):
@@ -188,5 +188,35 @@ def selected(request):
 
 # 响应显示实习生管理的请求
 def internmanage(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    ent_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, ent_id)
+    enterprise = Enterprise.objects.get(ent_id=ent_id)
+    jobs = Job.objects.filter(ent_id=enterprise)
+    choices = []
+    for job in jobs:
+        choices += Choice.objects.filter(job_id=job)
+    context['choices'] = choices
+    context['role_name'] = 'enterprise'
+    return render(request, 'practice/studentlist.html', context)
+
+
+# 为学生打分
+def mark(request, stu_id, score):
+    tea_id = request.session['user_id']
+    student = Student.objects.get(stu_id=stu_id)
+    choices = Choice.objects.filter(stu_id=student)
+    auth = False
+    for choice in choices:
+        if choice.result:
+            auth = True
+            break
+    if not auth:
+        return render(request, 'practice/error.html', { 'error_message': '没有权限为此学生打分' })
+    student.ent_mark = int(score)
+    student.save()
+    return redirect(reverse('practice.enterprise:internmanage'))
 

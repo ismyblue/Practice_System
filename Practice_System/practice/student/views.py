@@ -136,11 +136,8 @@ def applied(request):
     context = {}
     context['menu'] = daoapp.getMenu(role_id=role_id)
     context['username'] = daoapp.getUsername(role_id, stu_id)
-    choice = Choice.objects.filter(stu_id=stu_id)
-    jobs = []
-    for c in choice:
-        jobs.append(c.job_id)
-    context['jobs'] = jobs
+    choices = Choice.objects.filter(stu_id=stu_id)
+    context['choices'] = choices
     context['role_name'] = 'student'
     return render(request, 'practice/applied.html', context)
 

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect,reverse
 
 from practice import daoapp
-from practice.models import Teacher,Job
+from practice.models import Teacher, Job, Student, Choice
 
 
 # 响应显示主页的请求
@@ -82,11 +82,45 @@ def information(request, ent_id):
                                                    'role_name': 'teacher'})
 
 
+# 响应显示企业详情的请求
+def informationstudent(request, stu_id):
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    menu = daoapp.getMenu(role_id=role_id)
+    username = daoapp.getUsername(role_id, tea_id)
+    information = daoapp.getInformations(role_id=4, user_id=stu_id) # 企业的详细信息
+    return render(request, 'practice/index.html', {'menu': menu, 'information': information, 'username': username,
+                                                   'role_name': 'teacher'})
+
 
 # 响应显示学生管理的请求
 def studentmanage(request):
-    pass
+    session = request.session
+    role_id = int(session['role_id'])
+    tea_id = int(session['user_id'])
+    context = {}
+    context['menu'] = daoapp.getMenu(role_id=role_id)
+    context['username'] = daoapp.getUsername(role_id, tea_id)
+    teacher = Teacher.objects.get(tea_id=tea_id) # 获取本teacher对象
+    students = Student.objects.filter(tea_id=teacher) # 获取本teacher的所有学生
+    choices = []
+    for s in students:
+        choices += list(Choice.objects.filter(stu_id=s))
+    context['choices'] = choices
+    context['role_name'] = 'teacher'
+    return render(request, 'practice/studentlist.html', context)
 
+
+# 为学生打分
+def mark(request, stu_id, score):
+    tea_id = request.session['user_id']
+    student = Student.objects.get(stu_id=stu_id)
+    if student.tea_id.tea_id != tea_id:
+        return render(request, 'practice/error.html', { 'error_message': '没有权限为此学生打分' })
+    student.tea_mark = int(score)
+    student.save()
+    return redirect(reverse('practice.teacher:studentmanage'))
 
 # 响应显示浏览简历的请求
 def browseweeklyreport(request):

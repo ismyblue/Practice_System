@@ -155,7 +155,7 @@ class Choice(models.Model):
 
     # 在admin管理app中显示的名称
     def __str__(self):
-        return '{}:{}'.format(self.choice_id, self.stu_id)
+        return '{}:{}'.format(self.job_id, self.stu_id)
 
 
 # 实习周记表

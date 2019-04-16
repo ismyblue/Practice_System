@@ -16,4 +16,5 @@ urlpatterns = [
     path('deletechoice/<int:job_id>/<int:stu_id>/', views.deletechoice, name='deletechoice'),
     path('selected/', views.selected, name='selected'),
     path('internmanage/', views.internmanage, name='internmanage'),
+    path('mark/<int:stu_id>/<int:score>/', views.mark, name='mark'), # 为学生打分
 ]
